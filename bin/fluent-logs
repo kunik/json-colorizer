@@ -4,8 +4,9 @@ require_relative '../lib/options'
 require_relative '../lib/mongo_tail'
 require_relative '../lib/formatter'
 
-if File.exists?(File.expand_path('../../config.rb', __FILE__))
+begin
   require_relative '../config.rb'
+rescue
 end
 
 options = Options.new(ARGV)
