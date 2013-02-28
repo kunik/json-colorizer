@@ -65,7 +65,7 @@ class MongoTail
   end
 
   def fetch_all
-    collection.find(query, query_options).each { |doc| yield doc }
+    collection.find(query, query_options).sort({options.primary_key => 1}).each { |doc| yield doc }
   end
 
   def collection
