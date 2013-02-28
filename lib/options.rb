@@ -3,18 +3,20 @@ require 'optparse/time'
 require 'ostruct'
 
 class Options
+  HOUR = 60 * 60
+
   def initialize(args)
     @args = args
     @options = OpenStruct.new
-    @options.from = Time.now.utc
-    @tail = true
+    @options.from = (Time.now - 2 * HOUR).utc
+    @tail = false
 
     parse_args!
   end
 
   def parse_args!
     parser = OptionParser.new do |opts|
-      opts.banner = "Usage: logs [options]"
+      opts.banner = "Usage: logs [options] [<search for log message>]"
       opts.separator ""
       opts.separator "Specific options:"
 
@@ -43,8 +45,8 @@ class Options
         end]
       end
 
-      opts.on_tail("-o", "--one-time", "One-time query. Do not append the results") do
-        @tail = false
+      opts.on_tail("-r", "--tail", "Tail all logs") do
+        @tail = true
       end
 
       opts.separator ""
@@ -64,6 +66,10 @@ class Options
   end
 
   def query
+    if tail?
+      return {}
+    end
+
     q = { 'time' => { '$gt' => @options.from.utc } }
     q['time']['$lte'] = @options.to.utc if @options.to
     q.merge!(@options.tags) if @options.tags

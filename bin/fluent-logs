@@ -10,6 +10,10 @@ rescue
 end
 
 options = Options.new(ARGV)
+
+if options.tail?
+  puts "Tail!"
+end
 puts "Query: #{options.query}"
 
 logs = MongoTail.new(options.query, options.tail?)
