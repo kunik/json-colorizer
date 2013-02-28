@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/options'
+require_relative '../lib/mongo_tail'
+require_relative '../lib/formatter'
+
+if File.exists?('config.rb')
+  require_relative '../config.rb'
+end
+
+options = Options.new(ARGV)
+puts "Query: #{options.query}"
+
+logs = MongoTail.new(options.query, options.tail?)
+formatter = Formatter.new(options.schema)
+
+puts "Searching..."
+
+if options.tail?
+  logs.fetch do |log|
+    formatter.pretty_print log
+  end
+else
+  logs.fetch_all do |log|
+    formatter.pretty_print log
+  end
+end
+
+puts "Done!"
+
