@@ -1,2 +1,5 @@
-/config.rb
 *.sw[opn]
+.idea/
+.DS_Store
+Gemfile.lock
+json-colorizer-*.gem

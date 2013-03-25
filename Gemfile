@@ -1,6 +1,4 @@
-source :rubygems
+source "http://rubygems.org"
 
-gem 'mongo'
-gem 'bson_ext'
+gemspec
 
-gem 'colorize'

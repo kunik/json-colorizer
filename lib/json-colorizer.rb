@@ -1,14 +1,13 @@
 require 'colorize'
 
-class Formatter
-
+class JsonColorizer
   def initialize(schema)
     @schema = schema
     @schema_keys = @schema.keys
     @other = schema.delete(:_other)
   end
 
-  def pretty_print(data)
+  def format(data)
     parts = []
     @schema.each do |k, formatters|
       key = k.to_s
@@ -20,7 +19,7 @@ class Formatter
       parts << data.select{ |k, v| !@schema_keys.include?(k) }.to_s
     end
 
-    puts parts.join(' ')
+    parts.join(' ')
   end
 
   def apply_formatters(data, formatters)
@@ -53,12 +52,5 @@ class Formatter
   def colorize(s, color_options)
     s.to_s.colorize(color_options)
   end
-
-  def datetime(d)
-    d.to_s
-  end
-
-  def message(s)
-    s.to_s
-  end
 end
+
