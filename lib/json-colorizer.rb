@@ -9,10 +9,9 @@ class JsonColorizer
 
   def format(data)
     parts = []
-    @schema.each do |k, formatters|
-      key = k.to_s
+    @schema.each do |key, formatters|
       formatters = [formatters] unless formatters.is_a?(Array)
-      parts << apply_formatters(data[key], formatters)
+      parts << apply_formatters(data.fetch(key, data.fetch(key.to_s, nil)), formatters)
     end
 
     unless @other.nil?
